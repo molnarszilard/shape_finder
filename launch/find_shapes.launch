@@ -1,0 +1,16 @@
+
+<launch>
+ <node pkg="shape_finder" type="shape_finder_node" name="shape_finder_node" output="screen" >
+<remap from="point_cloud_in" to="/pico_zense/depth/points"/>
+<remap from="imu_data" to="filtered_imu"/>
+</node>
+
+ <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find shape_finder)/cfg/rviz.rviz"/>
+
+ <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen" />
+
+<node pkg="shape_finder" name="kalman" type="kalman.py" output="screen">
+</node>
+
+</launch>
+
