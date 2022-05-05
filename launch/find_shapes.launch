@@ -1,7 +1,7 @@
 
 <launch>
  <node pkg="shape_finder" type="shape_finder_node" name="shape_finder_node" output="screen" >
-<remap from="point_cloud_in" to="/pico_zense/depth/points"/>
+<remap from="point_cloud_in" to="/aditof_roscpp/aditof_pcloud"/>
 <remap from="imu_data" to="filtered_imu"/>
 </node>
 

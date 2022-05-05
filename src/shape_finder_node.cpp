@@ -65,7 +65,8 @@ public:
     config_server_.setCallback(boost::bind(&ShapeFinderNode::dynReconfCallback, this, _1, _2));
     sub_imu = nh_.subscribe("imu_data", 1, &ShapeFinderNode::imuCallback, this);
     ros::NodeHandle private_nh("~");
-    private_nh.param("frame_id", tf_frame, std::string("pico_zense_depth_frame"));
+    // private_nh.param("frame_id", tf_frame, std::string("pico_zense_depth_frame"));
+    private_nh.param("frame_id", tf_frame, std::string("base_link"));
   }
   ~ShapeFinderNode() {}
 

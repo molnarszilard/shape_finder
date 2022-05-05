@@ -40,7 +40,7 @@ class Subscriber(object):
 	def __init__(self):
 		super(Subscriber, self).__init__()
 		rospy.init_node('imu_conv', anonymous=True)
-
+		self.no_imu=True
 		self.kalman = Kalman(n_states = 3, n_sensors = 3)
 		self.kalman.H = np.matrix(np.identity(self.kalman.n_states))/2
 		#self.kalman.P *= 0.1
@@ -48,11 +48,22 @@ class Subscriber(object):
 
 		self.pub_accel = rospy.Publisher('filtered_imu', Imu)
 
-		rospy.Subscriber('/pico_zense/imu', Imu, self.callback_accel)
-		rospy.spin()
+		if self.no_imu:
+			rate = rospy.Rate(10)
+			while not rospy.is_shutdown():				
+				print("publishing fake imu")
+				vec = Imu()
+				vec.linear_acceleration.x = 1.0
+				vec.linear_acceleration.y = 9.81
+				vec.linear_acceleration.z = 1.0
+				self.pub_accel.publish(vec)
+				rate.sleep()
+		else:
+			rospy.Subscriber('/pico_zense/imu', Imu, self.callback_accel)
+			rospy.spin()
 		
 	def callback_accel(self, msg):
-		# print "received data: ", data
+		print("received data: ", msg.linear_acceleration.x,msg.linear_acceleration.y,msg.linear_acceleration.z)
 		Z = np.matrix([msg.linear_acceleration.x,msg.linear_acceleration.y,msg.linear_acceleration.z]).getT()
 
 		if self.kalman.first:
@@ -66,8 +77,8 @@ class Subscriber(object):
 		vec.linear_acceleration.x = self.kalman.x[1]
 		vec.linear_acceleration.y = -self.kalman.x[0]
 		vec.linear_acceleration.z = self.kalman.x[2]
-
-		self.pub_accel.publish(vec)
+		if not self.no_imu:
+			self.pub_accel.publish(vec)
 
 
 
