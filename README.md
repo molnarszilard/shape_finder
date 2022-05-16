@@ -14,3 +14,5 @@ roslaunch shape_finder find_shapes.launch
 The rviz should start. Don't forget to start the camera or the rosbag replay before starting the program.
 Make sure that an input point cloud is available, and its topic name is modified in the launch file (ocasionally you could modify the frame d in the cpp file to match the replay as well).
 if you don't have an IMU signal, inside src/kalman.py set self.no_imu=True, otherwise self.no_imu=False (and set the topic name for it.)
+
+The main file types are point clouds, RGB images and depth images captured by Pico Zense cameras and ADI Smart Cameras (Courtesy of Analog Devices).
